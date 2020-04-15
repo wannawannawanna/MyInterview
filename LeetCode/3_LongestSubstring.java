@@ -1,3 +1,4 @@
+//解法1，用数组实现的哈希表的功能，第一个解法好
 //跟剑指offer不同的是，输入的字符串可能不在‘a’~'z'的范围，如空格
 class Solution {
     public int lengthOfLongestSubstring(String s) {
@@ -23,5 +24,33 @@ class Solution {
         }
         
         return maxLength;
+    }
+}
+
+//解法2，直接用哈希表，不建议，因为后面好多题哈希表的功能都用数组实现的，所以要尝试着多写数组
+import java.util.HashMap;
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if(s == null || s.length() == 0){
+            return 0;
+        }
+        HashMap<Character, Integer> result = new HashMap<Character, Integer>();
+        int MAX = 0;
+        char[] array = s.toCharArray();
+        int length = 0;
+        for(int i = 0; i < array.length; i++) {      	
+        	if(result.get(array[i]) == null || i - result.get(array[i]) > length) {
+        		length++;
+        	}
+        	else {        		
+        		int index = result.get(array[i]);
+        		length = i - (index + 1) + 1;       		       				
+        	}
+        	result.put(array[i], i);
+        	if(length > MAX) {
+    			MAX = length;
+    		}  
+        }
+        return MAX;
     }
 }
