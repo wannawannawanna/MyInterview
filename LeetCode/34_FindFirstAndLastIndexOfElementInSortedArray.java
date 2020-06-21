@@ -4,7 +4,8 @@ class Solution {
     // inserted in sorted array `nums` via binary search.
     private int extremeInsertionIndex(int[] nums, int target, boolean left) {
         int lo = 0;
-        int hi = nums.length;
+        int hi = nums.length - 1 + 1;//加1的原因是因为数组只有一个元素且target就是那个元素的时候，这个函数会返回0，左边界没有问题，
+                                    //右边界减去1，之后右边界就成-1了,为了防止这种情况hi这里+1
 
         while (lo < hi) {
             int mid = (lo + hi) / 2;
