@@ -24,4 +24,12 @@ class Solution {
 泰勒公式：f(x) = f(x0) + f'(x0)(x - x0),另等式等于0，计算出x = x0 - f(x0)/f'(x0)
 开根号等于x^2 - a = 0 ,由上面公式得出，x = (x0 + a/x0)/2
 
-public int Sqrt(int x)
+class Solution {
+    public int mySqrt(int x) {
+        long res = (long)x;  //res如果是int型的，会报错
+        while((long)res * res > x){
+            res = (res + x / res) / 2;
+        }
+        return (int)res;
+    }
+}
