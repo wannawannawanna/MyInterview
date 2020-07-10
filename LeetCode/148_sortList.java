@@ -70,16 +70,28 @@ class Solution {
             return head;  //这块要注意，不能返回null ...因为判断条件还考虑了只有一个节点的时候
         }
         //快慢指针找到中间节点
-        ListNode first = head.next; //初始就先走一步
+        ListNode first = head;
         ListNode second = head;
-        while(first != null && first.next != null){ //停止在倒数第二个节点
+        while(first != null && first.next != null && first.next.next != null){
             first = first.next;
-            second = second.next;
-            if(first.next != null){
-                first = first.next;
-            }            
+            second = second.next;          
+            first = first.next;
+                     
         }
-        ListNode mid = second.next;  //循环截止之后，还要走一步，才是mid,这个写的时候自己举个例子就知道了
+        ListNode mid = second;
+     
+     
+     
+//         ListNode first = head.next; //初始就先走一步
+//         ListNode second = head;
+//         while(first != null && first.next != null){ //停止在倒数第二个节点
+//             first = first.next;
+//             second = second.next;
+//             if(first.next != null){
+//                 first = first.next;
+//             }            
+//         }
+//         ListNode mid = second.next;  //循环截止之后，还要走一步，才是mid,这个写的时候自己举个例子就知道了
         second.next = null; //分成两个链表
         //sort each half
         ListNode p1 = sortList(head);
