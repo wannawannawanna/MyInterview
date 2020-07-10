@@ -78,20 +78,7 @@ class Solution {
             first = first.next;
                      
         }
-        ListNode mid = second;
-     
-     
-     
-//         ListNode first = head.next; //初始就先走一步
-//         ListNode second = head;
-//         while(first != null && first.next != null){ //停止在倒数第二个节点
-//             first = first.next;
-//             second = second.next;
-//             if(first.next != null){
-//                 first = first.next;
-//             }            
-//         }
-//         ListNode mid = second.next;  //循环截止之后，还要走一步，才是mid,这个写的时候自己举个例子就知道了
+        ListNode mid = second.next;  //找到中间节点之后应该要指向next,才是第二段的开始
         second.next = null; //分成两个链表
         //sort each half
         ListNode p1 = sortList(head);
