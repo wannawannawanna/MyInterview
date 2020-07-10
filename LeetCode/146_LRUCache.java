@@ -29,14 +29,14 @@ class DoubleList {
     }
 
     // 删除链表中的 x 节点（x 一定存在）
-    public void remove(Node x) {
+    public void remove(Node x) {   //往HashMap添加数据的时候，如果已经存在，先删除，然后再把数据添加到链表头部
         x.prev.next = x.next;
         x.next.prev = x.prev;
         size--;
     }
     
     // 删除链表中最后一个节点，并返回该节点
-    public Node removeLast() {
+    public Node removeLast() {  //当链表容量已满，删除链表中最后一个节点
         if (tail.prev == head)
             return null;
         Node last = tail.prev;
@@ -48,7 +48,9 @@ class DoubleList {
     public int size() { return size; }
 }
 
+/*为什么必须要用双向链表?因为我们需要删除操作。删除一个节点不光要得到该节点本身的指针，也需要操作其前驱节点的指针，而双向链表才能支持直接查找前驱，保证操作的时间复杂度 O(1)
 
+*/
 class LRUCache {
     // key -> Node(key, val)
     private HashMap<Integer, Node> map;
@@ -76,9 +78,9 @@ class LRUCache {
         // 先把新节点 x 做出来
         Node x = new Node(key, val);
         
-        if (map.containsKey(key)) {
+        if (map.containsKey(key)) {  //如果这个节点在缓存中存在
             // 删除旧的节点，新的插到头部
-            cache.remove(map.get(key));
+            cache.remove(map.get(key)); 
             cache.addFirst(x);
             // 更新 map 中对应的数据
             map.put(key, x);
@@ -87,6 +89,8 @@ class LRUCache {
                 // 删除链表最后一个数据
                 Node last = cache.removeLast();
                 map.remove(last.key);
+                /*当缓存容量已满，我们不仅仅要删除缓存中最后一个 Node 节点，还要把 map 中映射到该节点的 key 同时删除，而这个 key 只能由 Node 得到。如果 Node 结构中只存储 val，
+                那么我们就无法得知 key 是什么，就无法删除 map 中的键，造成错误*/
             }
             // 直接添加到头部
             cache.addFirst(x);
