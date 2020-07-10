@@ -96,7 +96,8 @@ class LRUCache {
 }
 
 
-//o(1)时间内插入和删除，所以可以用链表（LinkedList,不是ArrayList,ArrayList是长度可变的数组），插入删除快，但是查找慢。。。查找也要快，哈希查的快，数据无固定顺序，链表有顺序；结合一下构成新的数据结构：哈希链表
+//o(1)时间内插入和删除，所以可以用链表（LinkedList,不是ArrayList,ArrayList是长度可变的数组），插入删除快，但是查找慢。。。查找也要快，哈希查的快，数据无固定顺序，链表有顺序；
+//结合一下构成新的数据结构：哈希链表
 //LRU机制是淘汰最近不常用的缓存淘汰，所以得有顺序之分，以区分常用的和许久未使用的数据，而且我们要在 cache 中查找键是否已存在；如果容量满了要删除最后一个数据；每次访问还要把数据插入到队头。
 
  /* Your LRUCache object will be instantiated and called as such:
