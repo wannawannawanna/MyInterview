@@ -16,7 +16,7 @@ class Solution {
             for(int j = 0; j < cols; j++){
                 if(matrix[i][j] == '1'){
                     dp[i + 1][j + 1] = Math.min(Math.min(dp[i+1][j], dp[i][j+1]), dp[i][j]) + 1;
-                    maxSide = Math.max(maxSide, dp[i + 1][j + 1]);
+                    maxSide = Math.max(maxSide, dp[i + 1][j + 1]);  //maxside值不是越往下或者越往后越大，所以这块要比较大小再赋值
                 }
             }
         }   
