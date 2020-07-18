@@ -19,15 +19,18 @@ public class mountain {
 			while(left <= right && prev == array[right]) {
 				right--;
 			}
-			if(array[left] <= array[right]) {
+			if(left <= right && array[left] <= array[right]) {
 				result.add(array[left]);
 				prev = array[left];
 				left++;
 			}
 			else {
-				result.add(array[right]);
-				prev = array[right];
-				right--;
+				if(left <= right){
+					result.add(array[right]);
+					prev = array[right];
+					right--;
+				}
+				
 			}
 		}
 		return result;
