@@ -1,7 +1,4 @@
-/*链接：https://www.nowcoder.com/questionTerminal/ea209d6014c44763a41ee04a11bf2ef1
-来源：牛客网
-
-P为给定的二维平面整数点集。定义 P 中某点x，如果x满足 P 中任意点都不在 x 的右上方区域内（横纵坐标都大于x），则称其为“最大的”。求出所有“最大的”点的集合。（所有点的横坐标和纵
+/*P为给定的二维平面整数点集。定义 P 中某点x，如果x满足 P 中任意点都不在 x 的右上方区域内（横纵坐标都大于x），则称其为“最大的”。求出所有“最大的”点的集合。（所有点的横坐标和纵
 坐标都不重复, 坐标轴范围在[0, 1e9) 内）
 
 如下图：实心点为满足条件的点的集合。请实现代码找到集合 P 中的所有 ”最大“ 点的集合并输出。
@@ -20,7 +17,7 @@ class Point{
     int x;
     int y;
 }
-public class Main{
+public class Main{  //首先按照y降序排序，然后看后一个x是否比前一个x大，大的话就是我们要的结果
     public static void main(String[] args){
         ArrayList<Point> list = new ArrayList<Point>();
         Scanner input = new Scanner(System.in);
