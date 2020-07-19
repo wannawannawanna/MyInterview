@@ -33,7 +33,7 @@ public class Main{
         }
         Collections.sort(list, new Comparator<Point>(){
             public int compare(Point p1, Point p2){
-                return p2.y - p1.y;  
+                return p2.y - p1.y;  //从大到小排序，就用第二个减第一个
             }
         });
         int tmp = list.get(0).x;
@@ -46,3 +46,4 @@ public class Main{
        
     }
 }
+//牛客只能过80%，超时了
