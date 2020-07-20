@@ -51,3 +51,18 @@ public class ReverseList {
 		System.out.println(reverseList(head).val);
 	}
 }
+
+
+//递归反转链表
+public class Solution {
+    public ListNode ReverseList(ListNode head) {
+        if(head == null || head.next == null) {
+			return head;
+		}
+        ListNode last = ReverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return last;
+		
+    }
+}
