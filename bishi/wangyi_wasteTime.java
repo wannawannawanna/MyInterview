@@ -27,8 +27,7 @@ public class wangyi_wastetime {
 				int itself = 0;
 				int all = 0;
 				int i = 0;
-				int ktemp = 0;
-				int j = 0;
+				int ktemp = 0;			
 				int pre = 0;
 				for(Integer k : map.keySet()) {
 					ArrayList<Integer> arr = map.get(k);
@@ -46,7 +45,6 @@ public class wangyi_wastetime {
 						}
 						all = sub;
 					}
-					j++;
 					pre = k;				
 				}
 				System.out.println(ktemp);	
