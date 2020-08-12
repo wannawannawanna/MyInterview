@@ -1,57 +1,54 @@
-
-
 package bishi;
 import java.util.*;
+class Log{
+	int timestamp;
+	int id;
+	int status;
+	Log(int timestamp, int id, int status){
+		this.timestamp = timestamp;
+		this.id = id;
+		this.status = status;
+	}
+}
 public class wangyi_wastetime {
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
 		while(input.hasNext()) {
 			int group = input.nextInt();
 			int N = input.nextInt();
-			input.nextLine();
-			HashMap<Integer, ArrayList<Integer>> map = new HashMap<Integer, ArrayList<Integer>>();
+			input.nextLine();			
 			for(int t = 0; t < group; t++) {
+				Stack<Log> stack = new Stack<Log>();
+				int[] times = new int[N];
 				for(int i = 0; i < N; i++) {
 					String[] str = input.nextLine().trim().split(" ");
-					ArrayList<Integer> array;
-					if(map.containsKey(Integer.valueOf(str[1]))) {
-						array = map.get(Integer.valueOf(str[1]));	
+					Log log = new Log(Integer.valueOf(str[0]), Integer.valueOf(str[1]), Integer.valueOf(str[2]));
+					if(Integer.valueOf(str[2]) == 0) {
+						stack.add(log);
 					}
 					else {
-						array = new ArrayList<Integer>();
-					}
-					array.add(Integer.valueOf(str[0]));
-					map.put(Integer.valueOf(str[1]), array);
-				}
-				int max = 0;
-				int itself = 0;
-				int all = 0;
-				int i = 0;
-				int ktemp = 0;			
-				int pre = 0;
-				for(Integer k : map.keySet()) {
-					ArrayList<Integer> arr = map.get(k);
-					if(i == 0) {
-						all = arr.get(1) - arr.get(0);
-						i++;
-						ktemp = k;
-					}
-					else {
-						int sub = arr.get(1) - arr.get(0);
-						itself = all - sub;
-						if(itself > max) {
-							max = itself;												
-							ktemp = pre;
+						int timeAdded = Integer.valueOf(str[0]) - stack.peek().timestamp;
+						times[Integer.valueOf(str[1])] += timeAdded;
+						stack.pop();
+						if(!stack.isEmpty()) {
+							times[stack.peek().id] -= timeAdded;
 						}
-						all = sub;
 					}
-					pre = k;				
 				}
-				System.out.println(ktemp);	
+				int max = Integer.MIN_VALUE;
+				int temp = 0;
+				for(int i = 0; i < N; i++) {
+					if(times[i] > max) {
+						max = times[i];
+						temp = i;
+					}
+				}
+				System.out.println(temp);	
 			}					
 		}
 	}
 }
+
 
 
 /*
