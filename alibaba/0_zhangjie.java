@@ -129,6 +129,79 @@ public class saleTicketBingFa implements Runnable {
 	}
 }
 
+//第二种方法，用链表加CountDownLatch做
+package bishi;
+/*ConcurrentLinkedQueue:在并发编程中，我们需要使用线程安全的队列，如果我们要实现一个线程安全的队列有两种方式，1.使用阻塞算法，可以用
+ * 一个锁（入队或出队用同一把锁），两把锁（入队一个锁，出队一个锁）2.使用非阻塞算法，可以使用循环CAS的方式来实现。ConcurrentLinkedQueue
+ * 就是非阻塞的方式实现的线程安全队列。ConcurrentLinkedQueue是一个基于链接节点的无界线程安全队列，采用先进先出的规则对节点进行排序，当我们
+ * 添加一个元素的时候会添加到队列的尾部，获取一个元素的时候是返回队头，内部有两个节点，head头结点，tail尾结点，使用item存储入列元素，next指向
+ * 下一个元素，offer入列，poll出列，peek返回队头元素，不出队。入队需要完成两件事情，第一是定位出尾结点，第二是使用CAS算法将入队节点设置成
+ * 尾结点的next节点，如不成功重试。
+ * */
+/*CountDownLatch:这个类使一个线程等待其他线程格子执行完毕后再执行，是通过一个计数器count来实现的，计数器的初始值就是线程的数量，每当一个
+ * 线程执行完毕后，计数器的值就减1，当计数器的值为0时，表示所有线程都执行完毕，然后再等待的线程就可以恢复了。调用await（）方法的线程会被
+ * 挂起，他会等待直到count值为0才继续执行，await（long timeout,TimeUnit unit）是要等待一定时间后count值还没变为0的话就
+ * 会继续执行，countDown()将count值减1*/
+/*CountDownLatch和CyclicBarrier区别：CountDownLatch是一个计数器，线程完成一个记录一个，计数器递减，只能用一次
+ * CyclicBarrier的计数器更像一个阀门，需要所有线程都到达，然后继续执行，计数器递增，提供reset功能，可以多次使用*/
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.ArrayList;
+
+public class saleTicket3 implements Runnable{  //继承Runnable，并重写run（）方法，就可以创建线程了
+	private Queue<String> tickets = new ConcurrentLinkedQueue<>();
+	saleTicket3(){
+		for(int i = 0; i < 100000; i++) {  //票数
+			tickets.add("票编号" + i);
+		}
+	}
+	private static StringBuffer sb = new StringBuffer(); //线程安全的
+	CountDownLatch latch = new CountDownLatch(10);
+	public void run() {
+		try {
+			latch.await();
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+		while(true) {
+			String s = tickets.poll();
+			if(s == null) {
+				break;
+			}
+			else {
+				sb.append(Thread.currentThread().getName() + "销售了" + s + "\n");
+			}
+		}
+	}
+	public static void main(String[] args) {
+		saleTicket3 st = new saleTicket3();
+		long start = 0L;
+		ArrayList<Thread> list = new ArrayList<>();
+		for(int i = 0; i < 10; i++) {
+			Thread th = new Thread(st);
+			th.start();
+			list.add(th);
+			if(i == 9) {
+				start = System.currentTimeMillis();
+			}
+			st.latch.countDown();  //等待所有线程一起开始
+		}
+		
+		//等待所有线程一起结束
+		list.forEach(o -> {
+			try {
+				o.join();
+			}catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		long end = System.currentTimeMillis();
+		System.out.println(sb.toString());
+		System.out.println(end - start + "ms");
+	}
+}
 
 
 
