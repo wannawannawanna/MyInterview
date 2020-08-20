@@ -90,6 +90,46 @@ public class Dijkstra {
 
 //第三题，并发卖票
 
+//第一种解法，用synchronized锁，效率不高
+package bishi;
+/*
+ * 创建线程的两种方式，1.继承Thread类。2.实现Runnable接口（较为常用的方法）实现Runnable的好处，
+ * 将线程的任务从线程的子类中分离出来，进行了单独的封装，按照面向对象的思想将任务封装成对象，避免了java单继承的局限性。*/
+
+public class saleTicketBingFa implements Runnable {
+	private int ticket = 60;
+	long start = 0L;
+	public void run() {
+		while(true) {
+			synchronized(this) { //将多条操作共享数据的线程代码封装起来，当有线程在执行这些代码的时候，其他线程是不可以参与
+				//运算的，必须要当前线程把这些代码都执行完后，其他线程才可以参与运算，用同步代码块可以解决这个问题。
+				if(ticket == 0) {
+					break;
+				}
+				try {
+					Thread.sleep(10);
+				}catch(InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.out.println(Thread.currentThread().getName() + "*******" + ticket--);
+			}
+			
+		}
+		long end = System.currentTimeMillis();
+
+        	System.out.println(end - start + "ms");
+	}
+	public static void main(String[] args) {		
+		saleTicketBingFa st = new saleTicketBingFa();
+		
+		new Thread(st).start();  //两个线程
+		new Thread(st).start();
+		
+		
+	}
+}
+
+
 
 
 
