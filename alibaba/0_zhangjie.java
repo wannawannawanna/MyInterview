@@ -90,7 +90,7 @@ public class Dijkstra {
 
 //第三题，并发卖票
 
-//第一种解法，用synchronized锁，效率不高
+//第一种解法，用synchronized锁，效率不高，但不是按线程顺序交替卖票
 package bishi;
 /*
  * 创建线程的两种方式，1.继承Thread类。2.实现Runnable接口（较为常用的方法）实现Runnable的好处，
@@ -127,7 +127,7 @@ public class saleTicketBingFa implements Runnable {
 	}
 }
 
-//第二种方法，用链表加CountDownLatch做
+//第二种方法，用链表加CountDownLatch做，也不是按线程顺序交替卖票
 package bishi;
 /*ConcurrentLinkedQueue:在并发编程中，我们需要使用线程安全的队列，如果我们要实现一个线程安全的队列有两种方式，1.使用阻塞算法，可以用
  * 一个锁（入队或出队用同一把锁），两把锁（入队一个锁，出队一个锁）2.使用非阻塞算法，可以使用循环CAS的方式来实现。ConcurrentLinkedQueue
@@ -189,7 +189,7 @@ public class saleTicket3 implements Runnable{  //继承Runnable，并重写run�
 		//等待所有线程一起结束
 		list.forEach(o -> {
 			try {
-				o.join();
+				o.join();  //确定线程何时结束
 			}catch(InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -205,3 +205,31 @@ public class saleTicket3 implements Runnable{  //继承Runnable，并重写run�
 
 
 //第四题，尽可能多的方法反转字符串
+
+
+
+
+//三个线程，打印数字从0开始
+public class ConcurrentPrint implements Runnable{
+    private volatile int count = 0;
+    public void run() {
+    	while(true) {
+    		synchronized (this) {
+            	try {
+            		Thread.sleep(10);
+            	}catch(InterruptedException e) {
+            		e.printStackTrace();                
+                } 
+            	System.out.println(Thread.currentThread().getName()+ " " + count);
+                count++;
+            }
+    	}    
+    }
+ 
+    public static void main(String[] args) {
+    	ConcurrentPrint demo = new ConcurrentPrint();
+        for (int i = 1; i <=3; i++) {  //三个线程
+            new Thread(demo).start();
+        }
+    }
+}
