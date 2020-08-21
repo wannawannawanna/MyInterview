@@ -121,11 +121,9 @@ public class saleTicketBingFa implements Runnable {
 	}
 	public static void main(String[] args) {		
 		saleTicketBingFa st = new saleTicketBingFa();
-		
-		new Thread(st).start();  //两个线程
-		new Thread(st).start();
-		
-		
+		for(int i = 0; i < 2; i++){   //两个线程
+			new Thread(st).start();  
+		}		
 	}
 }
 
