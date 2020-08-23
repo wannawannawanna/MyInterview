@@ -84,6 +84,159 @@ public class Dijkstra {
 
 
 //第二题，两个数组，非常大，比较两个数组是不是相等，要用多线程来实现
+package bishi;
+
+public class ConcurrentCompareArray {
+	public static void main(String[] args) {
+		Compare comp = new Compare();
+		int[] arr1 = {1,2,3,4,5,6,7,8,9,10,11,12,13};
+		int[] arr2 = {1,2,3,4,5,6,7,8,9,10,11,13};
+		comp.i = 0;
+		ThreadCompare th1 = new ThreadCompare(comp, arr1, arr2);  //三个线程
+		ThreadCompare th2 = new ThreadCompare(comp, arr1, arr2);
+		ThreadCompare th3 = new ThreadCompare(comp, arr1, arr2);
+		
+		th1.start();
+		th2.start();
+		th3.start();
+		
+		try {
+			th1.join();
+			th2.join();
+			th3.join();
+		}catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+}
+
+class Flag{
+	public volatile int flag = 0;
+}
+class Compare{
+	int i;
+	public synchronized void compare(int[] arr1, int[] arr2, Flag f) {
+		if(arr1[i] != arr2[i] || i > arr1.length) {
+			f.flag = 1; //信号终止线程
+			//System.out.println(Thread.currentThread().getName() + "对比了第" + i + "且不相等");
+			return;
+		}
+		System.out.println(Thread.currentThread().getName() + "对比了第" + i + "且相等");
+		f.flag = 0;
+		i++;		
+	}
+}
+
+class ThreadCompare extends Thread{
+	private Compare comp;
+	private int[] arr1, arr2;
+	ThreadCompare(Compare comp, int[] arr1, int[] arr2){
+		this.comp = comp;
+		this.arr1 = arr1;
+		this.arr2 = arr2;
+	}
+	public void run() {
+		Flag f = new Flag();
+		while(f.flag == 0) {
+			comp.compare(arr1, arr2, f);
+			try {
+				Thread.sleep(10);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+
+
+
+//多线程实现数组复制
+package bishi;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import org.omg.Messaging.SyncScopeHelper;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Random;
+
+
+public class compareArray {
+    public static void main(String[] args) {
+        Tree tree = new Tree();
+        int[] arr = new int[]{1,2,3,4,5,6,7,8,9,10,11,12};
+        int[] newarr = new int[arr.length];
+        System.out.println(Arrays.toString(newarr));
+        tree.value = arr.length-1;
+        ThreadPiao t1 = new ThreadPiao("线程1",tree,arr,newarr);
+        ThreadPiao t2 = new ThreadPiao("线程2",tree,arr,newarr);
+        ThreadPiao t3 = new ThreadPiao("线程3",tree,arr,newarr);
+ 
+        t1.start();
+        t2.start();
+        t3.start();
+ 
+       try {
+            t1.join();//这样可以使线程提前
+            t2.join();
+            t3.join();
+       }catch (InterruptedException e){
+            e.printStackTrace();
+       }
+        System.out.println("~~~~复制结束"+tree.value);
+    }
+}
+
+class Flagg {
+    public int flag = 0;
+}
+
+class Tree{
+	int value;
+	public synchronized void copy(int[] arr, int[] newarr, Flagg f, String name) {
+		if(value == -1) {  //
+			f.flag = 1;  
+			return;
+		}
+		newarr[value] = arr[value];
+		System.out.println(name + "赋值了：" + newarr[value] + "---数组变化为：" + Arrays.toString(newarr));
+		f.flag = 0;
+		value--;
+	}
+}
+class ThreadPiao extends Thread{
+	private String name;
+	private Tree tree;
+	private int[] arr, newarr;
+	ThreadPiao(String name, Tree tree, int[] arr, int[] newarr){
+		this.name = name;
+		this.tree = tree;
+		this.arr = arr;
+		this.newarr = newarr;
+	}
+	public void run() {
+		Flagg f = new Flagg();
+		while(f.flag == 0) {
+			tree.copy(arr, newarr, f, name);
+			try {
+				Thread.sleep(10);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+
+
 
 
 
