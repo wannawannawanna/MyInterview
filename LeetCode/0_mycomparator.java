@@ -11,6 +11,37 @@ class Point{
 
 //尽量不要写lambda表达式，可能会出错！！！！！！！！！
 
+//二维list，升序排序
+class myComparator implements Comparator<ArrayList>{
+	public int compare(ArrayList o1, ArrayList o2) {
+		if((int)o1.get(0) < (int)o2.get(0)) {
+			return -1;
+		}
+		else if((int)o1.get(0) == (int)o2.get(0)) {
+			return 0;
+		}
+		else {
+			return 1;
+		}
+	}
+}
+
+//一维list，升序排序
+class myComparator1 implements Comparator<Integer>{
+	public int compare(Integer o1, Integer o2) {
+		if(o1 < o2) {
+			return -1;
+		}
+		else if(o1 == o2) {
+			return 0;
+		}
+		else {
+			return 1;
+		}
+	}
+}
+
+
 //二维数组排序
 class Comparator1 implements Comparator<int[]>{ //对那种类型对象进行排序，comparator里面就写这个，
 	//可以是基本类型
